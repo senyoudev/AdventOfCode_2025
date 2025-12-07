@@ -1,10 +1,12 @@
 package Day3;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 
 public class Day3 {
 
@@ -44,12 +46,51 @@ public class Day3 {
         return totalJoltage;
     }
 
+    private static BigInteger findBest_part2(String line) {
+        Stack<Integer> stack = new Stack<>();
+        int length = line.length();
+        int k = length - 12;
+        for(int left = 0; left < line.length(); left++) {
+            int elem = line.charAt(left) - '0';
+            while(!stack.isEmpty() && stack.peek() < elem && k > 0 ) {
+                stack.pop();
+                k--;
+            }
+            stack.push(elem);
+        }
+
+        while(k > 0) {
+            stack.pop();
+            k--;
+        }
+
+        String newLine = "";
+        // Print stack elements
+        while (!stack.isEmpty()) {
+            newLine = stack.pop() + newLine;
+        }
+        
+        BigInteger total = new BigInteger(newLine);
+       return total;
+    }
+
+    private static BigInteger findJoltage_part2(List<String> lines) {
+        BigInteger totalJoltage = BigInteger.ZERO;
+            for (String line : lines) {
+            BigInteger duo = findBest_part2(line);
+            totalJoltage = totalJoltage.add(duo);
+        }
+        return totalJoltage;
+    }
+
     public static void main(String[] args) {
         Optional<List<String>> linesOptional = readInput("day3_input.txt");
         if (linesOptional.isPresent()) {
             List<String> lines = linesOptional.get();
             int total = findJoltage_part1(lines);
-            System.out.println(total);
+            System.out.println("Joltage for part1: " + total);
+            BigInteger total2 = findJoltage_part2(lines);
+            System.out.println("Joltage for part2: " + total2);
         }
     }
 }
