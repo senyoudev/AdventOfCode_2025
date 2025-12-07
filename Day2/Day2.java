@@ -6,10 +6,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-
 public class Day2 {
 
-        private static Optional<List<String>> readInput(String filename) {
+    private static Optional<List<String>> readInput(String filename) {
         Path path = Path.of(filename);
         try {
             return Optional.of(Files.readAllLines(path));
@@ -19,20 +18,19 @@ public class Day2 {
         }
     }
 
-
     private static long findInvalidIds_part1(List<String> lines) {
         long sumOfInvalidIds = 0;
-        for(String line: lines) {
+        for (String line : lines) {
             String[] IdRanges = line.split(",");
-            for(String idRange: IdRanges) {
+            for (String idRange : IdRanges) {
                 String firstId = idRange.split("-")[0];
                 String secondId = idRange.split("-")[1];
-                for(long id = Long.parseLong(firstId); id <= Long.parseLong(secondId); id++) {
+                for (long id = Long.parseLong(firstId); id <= Long.parseLong(secondId); id++) {
                     int length = String.valueOf(id).length();
                     // check if it's same value repeated
-                    if(String.valueOf(id).substring(0, length/2).equals(String.valueOf(id).substring(length/2))) {
+                    if (String.valueOf(id).substring(0, length / 2).equals(String.valueOf(id).substring(length / 2))) {
                         sumOfInvalidIds += id;
-                    }         
+                    }
                 }
             }
         }
@@ -43,13 +41,13 @@ public class Day2 {
         // Check if it's same value repeated twice or more
         String s = String.valueOf(id);
 
-        for(int k = 1; k <= length / 2; k++) {
-            if(length % k == 0) {
+        for (int k = 1; k <= length / 2; k++) {
+            if (length % k == 0) {
                 int reps = length / k;
                 String elem = s.substring(0, k);
-                
+
                 String repeated = elem.repeat(reps);
-                if(repeated.equals(s)) {
+                if (repeated.equals(s)) {
                     return true;
                 }
             }
@@ -68,9 +66,9 @@ public class Day2 {
                 for (long id = Long.parseLong(firstId); id <= Long.parseLong(secondId); id++) {
                     int length = String.valueOf(id).length();
                     // check if it's same value repeated twice or more
-                    if(isValid(id, length)) {
+                    if (isValid(id, length)) {
                         sumOfInvalidIds += id;
-                    }         
+                    }
                 }
             }
         }
@@ -79,7 +77,7 @@ public class Day2 {
 
     public static void main(String[] args) {
         Optional<List<String>> linesOptional = readInput("day2_input.txt");
-        if(linesOptional.isPresent()) {
+        if (linesOptional.isPresent()) {
             long sum = findInvalidIds_part1(linesOptional.get());
             System.out.println("Invalid Ids for part 1: " + sum);
             sum = findInvalidIds_part2(linesOptional.get());
